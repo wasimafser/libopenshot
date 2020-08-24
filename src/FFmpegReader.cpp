@@ -295,8 +295,8 @@ void FFmpegReader::Open() {
 #endif
 				retry_decode_open = 0;
 
-				// Set number of threads equal to number of processors (not to exceed 16)
-				pCodecCtx->thread_count = std::min(FF_NUM_PROCESSORS, 16);
+				// Set number of threads equal to number of processors (with an upper bound)
+				pCodecCtx->thread_count = std::min(FF_NUM_PROCESSORS, 64);
 
 				if (pCodec == NULL) {
 					throw InvalidCodec("A valid video codec could not be found for this file.", path);
@@ -530,8 +530,8 @@ void FFmpegReader::Open() {
 			AVCodec *aCodec = avcodec_find_decoder(codecId);
 			aCodecCtx = AV_GET_CODEC_CONTEXT(aStream, aCodec);
 
-			// Set number of threads equal to number of processors (not to exceed 16)
-			aCodecCtx->thread_count = std::min(FF_NUM_PROCESSORS, 16);
+			// Set number of threads equal to number of processors (with an upper bound)
+			aCodecCtx->thread_count = std::min(FF_NUM_PROCESSORS, 64);
 
 			if (aCodec == NULL) {
 				throw InvalidCodec("A valid audio codec could not be found for this file.", path);

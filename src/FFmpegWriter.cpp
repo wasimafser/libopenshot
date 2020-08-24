@@ -1370,8 +1370,8 @@ void FFmpegWriter::open_audio(AVFormatContext *oc, AVStream *st) {
 	AVCodec *codec;
 	AV_GET_CODEC_FROM_STREAM(st, audio_codec_ctx)
 
-	// Set number of threads equal to number of processors (not to exceed 16)
-	audio_codec_ctx->thread_count = std::min(FF_NUM_PROCESSORS, 16);
+	// Set number of threads equal to number of processors (with an upper bound)
+	audio_codec_ctx->thread_count = std::min(FF_NUM_PROCESSORS, 64);
 
 	// Find the audio encoder
 	codec = avcodec_find_encoder_by_name(info.acodec.c_str());
@@ -1441,8 +1441,8 @@ void FFmpegWriter::open_video(AVFormatContext *oc, AVStream *st) {
 	AVCodec *codec;
 	AV_GET_CODEC_FROM_STREAM(st, video_codec_ctx)
 
-	// Set number of threads equal to number of processors (not to exceed 16)
-	video_codec_ctx->thread_count = std::min(FF_NUM_PROCESSORS, 16);
+	// Set number of threads equal to number of processors (with an upper bound)
+	video_codec_ctx->thread_count = std::min(FF_NUM_PROCESSORS, 64);
 
 #if HAVE_HW_ACCEL
 	if (hw_en_on && hw_en_supported) {
