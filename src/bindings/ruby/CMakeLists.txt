@@ -83,11 +83,14 @@ set(SWIG_CXX_FLAGS "-Wno-unused-variable -Wno-unused-function \
 #      'Init_openshot()' (via the module name set in the SWIG .i file).
 #      Which leads to Ruby barfing when it attempts to load the module.
 set_target_properties(${SWIG_MODULE_rbopenshot_REAL_NAME} PROPERTIES
-	                      PREFIX "" OUTPUT_NAME "openshot")
+  PREFIX "" OUTPUT_NAME "openshot")
 
 	### Link the new Ruby wrapper library with libopenshot
 target_link_libraries(${SWIG_MODULE_rbopenshot_REAL_NAME} PUBLIC
-	                      ${RUBY_LIBRARY} openshot)
+  ${RUBY_LIBRARY} openshot)
+
+target_compile_definitions(${SWIG_MODULE_rbopenshot_REAL_NAME} PUBLIC
+  HAVE_ISFINITE=1)
 
 ######### INSTALL PATH ########
 if (NOT DEFINED RUBY_MODULE_PATH AND DEFINED $ENV{RUBY_MODULE_PATH})
